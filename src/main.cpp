@@ -1916,7 +1916,7 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
                 printf("Grant award in block %s, %llu\n",gait->first.c_str(),gait->second);
              }
 
-            if (awardFound != grantAwards.size()){
+            if (awardFound != grantAwards.size() && !fTestNet){
                   return state.DoS(100, error("ConnectBlock() : coinbase not paying grants to award winners "));
             }
         }
