@@ -32,7 +32,12 @@
 #define MSG_NOSIGNAL        SO_NOSIGPIPE
 #endif
 
+#ifdef _WIN64
+typedef UINT_PTR SOCKET;
+#else
 typedef u_int SOCKET;
+#endif
+
 #ifdef WIN32
 #define MSG_NOSIGNAL        0
 #define MSG_DONTWAIT        0
