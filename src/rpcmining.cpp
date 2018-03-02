@@ -506,7 +506,22 @@ Value getblocktemplate(const Array& params, bool fHelp)
         setTxIndex[txHash] = i++;
 
         if (tx.IsCoinBase())
+        {
+            if(isGrantAwardBlock(pindexPrev->nHeight+1))
+            {
+                CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
+                CTransaction ttx;
+                ssTx << tx;
+                CDataStream(ParseHex(HexStr(ssTx.begin(), ssTx.end())), SER_NETWORK, PROTOCOL_VERSION) >> ttx;
+                for(unsigned int cnt = 1; cnt < ttx.vout.size(); cnt++)
+                {
+                   CTxDestination dst;
+                   ExtractDestination(ttx.vout[cnt].scriptPubKey, dst);
+                   rewards.push_back(Pair(CBitcoinAddress(dst).ToString().c_str(), (int64_t)ttx.vout[cnt].nValue));
+                }
+            }
             continue;
+        }
 
         Object entry;
 
@@ -559,6 +574,8 @@ Value getblocktemplate(const Array& params, bool fHelp)
     result.push_back(Pair("curtime", (int64_t)pblock->nTime));
     result.push_back(Pair("bits", HexBits(pblock->nBits)));
     result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
+    if(isGrantAwardBlock(pindexPrev->nHeight+1))
+        result.push_back(Pair("rewards", rewards));
 
     return result;
 }
