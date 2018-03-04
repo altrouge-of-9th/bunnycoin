@@ -2851,6 +2851,8 @@ bool static LoadBlockIndexDB()
         hashBestChain.ToString().c_str(), nBestHeight,
         DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexBest->GetBlockTime()).c_str());
 
+    ensureGrantDatabaseUptoDate(nBestHeight);
+
     return true;
 }
 
