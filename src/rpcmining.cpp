@@ -498,6 +498,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
     pblock->nNonce = 0;
 
     Array transactions;
+    Object rewards;
     map<uint256, int64_t> setTxIndex;
     int i = 0;
     BOOST_FOREACH (CTransaction& tx, pblock->vtx)
